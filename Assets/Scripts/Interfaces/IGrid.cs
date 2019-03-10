@@ -7,5 +7,6 @@ public interface IGrid
     List<IShape> FieldList { get; set; }
 
     void GenerateGrid();
-    void CheckPieceOnField(Vector2 position);
+    void ShowReach(PieceController piece, IShape field);
+    void HideReach();
 }

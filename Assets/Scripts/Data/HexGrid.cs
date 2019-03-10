@@ -12,20 +12,69 @@ public class HexGrid : MonoBehaviour, IGrid
     [HideInInspector]
     public List<IShape> FieldList { get; set; }
 
+    private List<Hex> HighlightedFields;
+    private PieceController SelectedPiece;
+    private bool IsPieceSelected = false;
+
     // Start is called before the first frame update
     void Start()
     {
+        HighlightedFields = new List<Hex>();
         GenerateGrid();
     }
 
-    void Update()
+    #region CheckField()
+    public void CheckField(Hex field)
     {
-        if(Input.GetMouseButton(0))
+        var pieceOnField = IsPieceOnField(field);
+        if (!IsPieceSelected && pieceOnField.IsPieceOnField)
         {
-            CheckPieceOnField(MouseHelper.GetMouseWorldPoint(Camera.main));
+            SelectPiece(pieceOnField.Piece);
         }
+        else if (IsPieceSelected && !pieceOnField.IsPieceOnField)
+        {
+            if(CheckIfFieldInRange(field))
+            {
+                MovePieceToField(SelectedPiece, field);
+                DeselectPiece();
+            }
+            else
+            {
+                DeselectPiece();
+            }
+        }
+        Debug.Log(String.Format("IsPieceSelected: {0}", IsPieceSelected));
     }
 
+    private void MovePieceToField(PieceController selectedPiece, Hex field)
+    {
+        selectedPiece.MovePiece(field);
+    }
+
+    private bool CheckIfFieldInRange(Hex field)
+    {
+        return HighlightedFields.Any(h => h.AxialPosition == field.AxialPosition);
+    }
+
+    private void DeselectPiece()
+    {
+        SelectedPiece = null;
+        IsPieceSelected = false;
+
+        HideReach();
+    }
+
+    private void SelectPiece(PieceController piece)
+    {
+        SelectedPiece = piece;
+        IsPieceSelected = true;
+
+        HideReach();
+        ShowReach(piece, piece.CurrentField);
+    }
+    #endregion
+
+    #region GenerateGrid()
     public void GenerateGrid()
     {
         FieldList = new List<IShape>();
@@ -41,12 +90,14 @@ public class HexGrid : MonoBehaviour, IGrid
             }
         }
     }
+    #endregion
 
+    #region GenerateHex()
     private void GenerateHex(
-        int column, 
-        int row, 
-        float hexRadius, 
-        GameObject hexPrefab = null)
+       int column,
+       int row,
+       float hexRadius,
+       GameObject hexPrefab = null)
     {
         try
         {
@@ -86,29 +137,60 @@ public class HexGrid : MonoBehaviour, IGrid
             Debug.Log(ex.Message);
         }
     }
+    #endregion
 
+    #region DestroyHex()
     private void DestroyHex(Hex hex)
     {
         GameObject hexObject = hex.hexObject;
         Destroy(hexObject);
         FieldList.Remove(hex);
     }
+    #endregion
 
-    public void CheckPieceOnField(Vector2 position)
+    #region IsPieceOnField()
+    public (bool IsPieceOnField, PieceController Piece) IsPieceOnField(Hex field)
     {
         List<PieceController> piecesOnBoard = gameObject.GetComponentsInChildren<PieceController>().ToList();
-
-        Vector3 clickedHexCoords = HexHelper.WorldPositionToAxial(MouseHelper.GetMouseWorldPoint(Camera.main), hexRadius);
         List<Hex> hexList = FieldList.ConvertAll(h => (Hex)h);
 
-        Hex clickedHex = hexList.Where(h => h.CubePosition == clickedHexCoords).FirstOrDefault();
-
-        foreach(var piece in piecesOnBoard)
+        foreach (var piece in piecesOnBoard)
         {
-            if(piece.CurrentField == clickedHex)
+            if (piece.CurrentField == field)
             {
-                Debug.Log("Piece clicked!");
+                return (true, piece);
             }
         }
+
+        return (false, null);
     }
+    #endregion
+
+    #region ShowReach()
+    public void ShowReach(PieceController piece, IShape clickedHex)
+    {
+        int range = piece.CurrentActionPoints;
+
+        List<Hex> reachableHexes = new List<Hex>();
+        reachableHexes = HexHelper.GetMovementRange((Hex)piece.CurrentField, FieldList.Cast<Hex>().ToList(), range);
+
+        foreach (Hex hex in reachableHexes)
+        {
+            hex.hexObject.GetComponent<HexController>().SetReach(true);
+        }
+
+        HighlightedFields = reachableHexes;
+    }
+    #endregion
+
+    #region HideReach()
+    public void HideReach()
+    {
+        foreach (Hex hex in HighlightedFields)
+        {
+            hex.hexObject.GetComponent<HexController>().SetReach(false);
+        }
+        HighlightedFields.Clear();
+    }
+    #endregion
 }

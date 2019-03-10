@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class HexHelperTests
@@ -137,5 +138,130 @@ public class HexHelperTests
 
         Assert.AreEqual(resultHex.Column, -3);
         Assert.AreEqual(resultHex.Row, 0);
+    }
+
+    [Test]
+    public void AxialOperations_Test()
+    {
+        // Arrange
+        var axialCoords1 = new Vector2(-1, 2);
+        var axialCoords2 = new Vector2(3, 1);
+        var multiplyConstant = 2;
+
+        // Act
+        var resultAdd = HexHelper.AxialAdd(axialCoords1, axialCoords2);
+        var resultSubtract = HexHelper.AxialSubtract(axialCoords1, axialCoords2);
+        var resultMultiply = HexHelper.AxialMultiply(axialCoords1, multiplyConstant);
+
+        // Assert
+        Assert.AreEqual(resultAdd.x, 2);
+        Assert.AreEqual(resultAdd.y, 3);
+
+        Assert.AreEqual(resultSubtract.x, -4);
+        Assert.AreEqual(resultSubtract.y, 1);
+
+        Assert.AreEqual(resultMultiply.x, -2);
+        Assert.AreEqual(resultMultiply.y, 4);
+    }
+
+    [Test]
+    public void CubeOperations_Test()
+    {
+        // Arrange
+        var cubeCoords1 = new Vector3(-1, 2, -1);
+        var cubeCoords2 = new Vector3(3, 1, -4);
+        var multiplyConstant = 2;
+
+        // Act
+        var resultAdd = HexHelper.CubeAdd(cubeCoords1, cubeCoords2);
+        var resultSubtract = HexHelper.CubeSubtract(cubeCoords1, cubeCoords2);
+        var resultMultiply = HexHelper.CubeMultiply(cubeCoords1, multiplyConstant);
+
+        // Assert
+        Assert.AreEqual(resultAdd.x, 2);
+        Assert.AreEqual(resultAdd.y, 3);
+        Assert.AreEqual(resultAdd.z, -5);
+
+        Assert.AreEqual(resultSubtract.x, -4);
+        Assert.AreEqual(resultSubtract.y, 1);
+        Assert.AreEqual(resultSubtract.z, 3);
+
+        Assert.AreEqual(resultMultiply.x, -2);
+        Assert.AreEqual(resultMultiply.y, 4);
+        Assert.AreEqual(resultMultiply.z, -2);
+    }
+
+    [Test]
+    public void HexOperations_Test()
+    {
+        // Arrange
+        var radius = 0.5f;
+        var hex_1 = new Hex(-1, 2, radius);
+        var hex_2 = new Hex(3, 1, radius);
+        var multiplyConstant = 2;
+
+        // Act
+        var resultAdd = HexHelper.HexAdd(hex_1, hex_2);
+        var resultSubtract = HexHelper.HexSubtract(hex_1, hex_2);
+        var resultMultiply = HexHelper.HexMultiply(hex_1, multiplyConstant);
+
+        // Assert
+        Assert.AreEqual(resultAdd.Column, 2);
+        Assert.AreEqual(resultAdd.Row, 3);
+        Assert.AreEqual(resultAdd.S, -5);
+
+        Assert.AreEqual(resultSubtract.Column, -4);
+        Assert.AreEqual(resultSubtract.Row, 1);
+        Assert.AreEqual(resultSubtract.S, 3);
+
+        Assert.AreEqual(resultMultiply.Column, -2);
+        Assert.AreEqual(resultMultiply.Row, 4);
+        Assert.AreEqual(resultMultiply.S, -2);
+    }
+
+    [Test]
+    public void GetMovementRange_Test()
+    {
+        // Arrange
+        List<Hex> hexList = new List<Hex>();
+        var gridRadius = 3;
+        var hexRadius = 0.5f;
+
+        for (int q = -gridRadius; q <= gridRadius; q++)
+        {
+            int r1 = Mathf.Max(-gridRadius, -q - gridRadius);
+            int r2 = Mathf.Min(gridRadius, -q + gridRadius);
+
+            for (int r = r1; r <= r2; r++)
+            {
+                Hex hex = new Hex(
+                    q,
+                    r,
+                    hexRadius
+                    );
+
+                hexList.Add(hex);
+            }
+        }
+
+        Hex centerHex = new Hex(0, 3, hexRadius);
+
+        var range = 2;
+
+        // Act
+        List<Hex> hexInRange = HexHelper.GetMovementRange(centerHex, hexList, range);
+
+        // Assert
+        Assert.IsTrue(hexInRange.Count == 9);
+
+        Assert.IsTrue(hexInRange.Any(h => h.Column == 0 && h.Row == 3));
+        Assert.IsTrue(hexInRange.Any(h => h.Column == -1 && h.Row == 3));
+        Assert.IsTrue(hexInRange.Any(h => h.Column == -2 && h.Row == 3));
+        Assert.IsTrue(hexInRange.Any(h => h.Column == -1 && h.Row == 2));
+        Assert.IsTrue(hexInRange.Any(h => h.Column == 0 && h.Row == 2));
+        Assert.IsTrue(hexInRange.Any(h => h.Column == 1 && h.Row == 2));
+        Assert.IsTrue(hexInRange.Any(h => h.Column == 2 && h.Row == 1));
+        Assert.IsTrue(hexInRange.Any(h => h.Column == 1 && h.Row == 1));
+        Assert.IsTrue(hexInRange.Any(h => h.Column == 0 && h.Row == 1));
     }
 }
