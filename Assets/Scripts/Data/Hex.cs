@@ -5,13 +5,30 @@ using UnityEngine;
 
 public class Hex : IShape
 {
-    public int Column { get; }
-    public int Row { get; }
-    public int S { get; }
-    public Vector3 Position { get; set; }
-    public GameObject hexObject { get; set; }
+    public int Column { get; private set; }
+    public int Row { get; private set; }
+    public int S { get; private set; }
 
-    public static float WIDTH_MULTIPLIER = Mathf.Sqrt(3) / 2;
+    public Vector3 Position { get; private set; }
+    public float Radius { get; }
+
+    public Vector3 CubePosition
+    {
+        get
+        {
+            return new Vector3(Column, S, Row);
+        }
+    }
+
+    public Vector3 AxialPosition
+    {
+        get
+        {
+            return HexHelper.CubeToAxial(CubePosition);
+        }
+    }
+
+    public GameObject hexObject { get; set; }
 
     public Hex()
     {
@@ -19,26 +36,16 @@ public class Hex : IShape
 
     public Hex(int column, int row, float radius)
     {
-        Column = column;
-        Row = row;
-        S = -(column + row);
-
-        CalculatePosition(radius);
+        Radius = radius;
+        SetPosition(new Vector2(column, row));
     }
 
-    private void CalculatePosition(float radius)
+    public void SetPosition(Vector2 coords)
     {
-        float height = radius * 2;
-        float width = WIDTH_MULTIPLIER * height;
+        Column = (int)coords.x;
+        Row = (int)coords.y;
+        S = -((int)coords.x + (int)coords.y);
 
-        float vertical = height * 0.75f;
-        float horizontal = width;
-
-        Position = new Vector3(horizontal * (Column + Row / 2f), vertical * Row);
-    }
-
-    public Vector2 GetAxialPositon()
-    {
-        return HexHelper.CubeToAxial(Position);
+        Position = HexHelper.CalculateHexPosition(CubePosition, Radius);
     }
 }

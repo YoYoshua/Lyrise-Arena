@@ -13,8 +13,8 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
+  - Board
+  - Piece
   - 
   - 
   - 
@@ -38,6 +38,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Board Layer
+    uniqueID: 3697902513
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Piece Layer
+    uniqueID: 1973939543
     locked: 0

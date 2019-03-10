@@ -5,5 +5,5 @@ using UnityEngine;
 public static class PrefabManager
 {
     public static GameObject HexPrefab;
-    public static GameObject HexHoverPrefab;
+    public static GameObject PiecePrefab;
 }

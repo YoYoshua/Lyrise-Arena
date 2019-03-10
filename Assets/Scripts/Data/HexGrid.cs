@@ -9,27 +9,37 @@ public class HexGrid : MonoBehaviour, IGrid
     public int gridRadius;
     public float hexRadius;
 
-    private List<Hex> hexTable;
+    [HideInInspector]
+    public List<IShape> FieldList { get; set; }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        GenerateGrid();
+    }
+
+    void Update()
+    {
+        if(Input.GetMouseButton(0))
+        {
+            CheckPieceOnField(MouseHelper.GetMouseWorldPoint(Camera.main));
+        }
+    }
 
     public void GenerateGrid()
     {
-        hexTable = new List<Hex>();
+        FieldList = new List<IShape>();
 
         for (int q = -gridRadius; q <= gridRadius; q++)
         {
             int r1 = Mathf.Max(-gridRadius, -q - gridRadius);
             int r2 = Mathf.Min(gridRadius, -q + gridRadius);
 
-            for(int r = r1; r <= r2; r++)
+            for (int r = r1; r <= r2; r++)
             {
                 GenerateHex(q, r, hexRadius);
             }
         }
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        GenerateGrid();
     }
 
     private void GenerateHex(
@@ -53,6 +63,12 @@ public class HexGrid : MonoBehaviour, IGrid
                 Quaternion.identity
                 );
 
+            //set new hex object as a child
+            hexObject.transform.parent = gameObject.transform;
+
+            //pass Hex object to HexController
+            hexObject.GetComponent<HexController>().HexObject = hex;
+
             //scale hexObject
             float scale = hexRadius / 0.5f;
             hexObject.transform.localScale = new Vector3(
@@ -63,7 +79,7 @@ public class HexGrid : MonoBehaviour, IGrid
             //assign gameObject to Hex object
             hex.hexObject = hexObject;
 
-            hexTable.Add(hex);
+            FieldList.Add(hex);
         }
         catch (Exception ex)
         {
@@ -75,24 +91,24 @@ public class HexGrid : MonoBehaviour, IGrid
     {
         GameObject hexObject = hex.hexObject;
         Destroy(hexObject);
-        hexTable.Remove(hex);
+        FieldList.Remove(hex);
     }
 
-
-    public Hex GetHoverHex(Vector2 point)
+    public void CheckPieceOnField(Vector2 position)
     {
-        var q = (2.0f / 3.0f * point.x) / hexRadius;
-        var r = (-1.0f / 3.0f * point.x + Mathf.Sqrt(3) / 3 * point.y) / hexRadius;
+        List<PieceController> piecesOnBoard = gameObject.GetComponentsInChildren<PieceController>().ToList();
 
-        try
+        Vector3 clickedHexCoords = HexHelper.WorldPositionToAxial(MouseHelper.GetMouseWorldPoint(Camera.main), hexRadius);
+        List<Hex> hexList = FieldList.ConvertAll(h => (Hex)h);
+
+        Hex clickedHex = hexList.Where(h => h.CubePosition == clickedHexCoords).FirstOrDefault();
+
+        foreach(var piece in piecesOnBoard)
         {
-            Vector2 hexCoords = HexHelper.HexRound(point);
-            return hexTable.Where(h => h.Column == hexCoords.x && h.Row == hexCoords.y).FirstOrDefault();
-        }
-        catch(Exception ex)
-        {
-            Debug.Log(ex.Message);
-            return new Hex();
+            if(piece.CurrentField == clickedHex)
+            {
+                Debug.Log("Piece clicked!");
+            }
         }
     }
 }

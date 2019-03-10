@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2547245705481047130}
   - component: {fileID: 6204698637157885245}
-  - component: {fileID: 1996233362222509967}
   m_Layer: 0
   m_Name: HexPrefab
   m_TagString: Untagged
@@ -46,37 +45,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0129e68070981d44a978b5b7fdcef10e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!60 &1996233362222509967
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4711519433248280937}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -0.010554403, y: 0.4933884}
-      - {x: -0.43389046, y: 0.24041322}
-      - {x: -0.4358537, y: -0.23946984}
-      - {x: -0.0024798065, y: -0.4841106}
-      - {x: 0.41702518, y: -0.23907888}
-      - {x: 0.40750438, y: 0.24569075}
 --- !u!1 &5741133266961315702
 GameObject:
   m_ObjectHideFlags: 0
@@ -142,8 +110,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -597064783
+  m_SortingLayer: -1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 747305af1b6ff914a8e79bfa80f20ddf, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -221,8 +189,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -597064783
+  m_SortingLayer: -1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 28d0a3e49c1180741af3e52c1b6cea2e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

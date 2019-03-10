@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IShape
+public interface IObject
 {
-    int Column { get; }
-    int Row { get; }
-
     Vector3 Position { get; }
-    void SetPosition(Vector2 coords);
+    IShape CurrentField { get; set; }
+    GameObject ObjectPrefab { get; set; }
 }
