@@ -231,7 +231,7 @@ public class HexGridController : MonoBehaviour, IGrid
         int range = piece.currentActionPoints;
 
         List<Hex> reachableHexes = new List<Hex>();
-        reachableHexes = HexHelper.GetMovementRange((Hex)piece.CurrentField, FieldList.Cast<Hex>().ToList(), range);
+        reachableHexes = HexHelper.GetRange((Hex)piece.CurrentField, FieldList.Cast<Hex>().ToList(), range);
 
         foreach (Hex hex in reachableHexes)
         {

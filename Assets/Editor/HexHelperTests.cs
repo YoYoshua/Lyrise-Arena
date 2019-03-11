@@ -7,7 +7,7 @@ using UnityEngine;
 public class HexHelperTests
 {
     [Test]
-    public void CalculateHexPosition_Test()
+    public void CalculateHexWorldPosition_Test()
     {
         // Arrange
         var column = 3;
@@ -15,7 +15,7 @@ public class HexHelperTests
         var radius = 0.7f;
 
         // Act
-        var hexPosition = HexHelper.CalculateHexPosition(new Vector2(column, row), radius);
+        var hexPosition = HexHelper.CalculateHexWorldPosition(new Vector2(column, row), radius);
 
         // Assert
         Assert.AreEqual(hexPosition.x, 6.66839564f, 0.1f);
@@ -98,7 +98,7 @@ public class HexHelperTests
     }
 
     [Test]
-    public void GetHexOnWorldPosition_NotFound_Test()
+    public void GetHexByWorldPosition_NotFound_Test()
     {
         // Arrange
         var worldPosition = new Vector2(-1.299f, 2.25f);
@@ -111,14 +111,14 @@ public class HexHelperTests
         hexList.Add(new Hex(-1, 2, hexSize));
 
         // Act
-        var resultHex = HexHelper.GetHexOnWorldPosition(hexList, worldPosition, hexSize);
+        var resultHex = HexHelper.GetHexByWorldPosition(hexList, worldPosition, hexSize);
 
         // Assert
         Assert.IsNull(resultHex);
     }
 
     [Test]
-    public void GetHexOnWorldPosition_Found_Test()
+    public void GetHexByWorldPosition_Found_Test()
     {
         // Arrange
         var worldPosition = new Vector2(-1.299f, 2.25f);
@@ -131,7 +131,7 @@ public class HexHelperTests
         hexList.Add(new Hex(-1, 2, hexSize));
 
         // Act
-        var resultHex = HexHelper.GetHexOnWorldPosition(hexList, worldPosition, hexSize);
+        var resultHex = HexHelper.GetHexByWorldPosition(hexList, worldPosition, hexSize);
 
         // Assert
         Assert.IsNotNull(resultHex);
@@ -220,7 +220,7 @@ public class HexHelperTests
     }
 
     [Test]
-    public void GetMovementRange_Test()
+    public void GetRange_Test()
     {
         // Arrange
         List<Hex> hexList = new List<Hex>();
@@ -249,7 +249,7 @@ public class HexHelperTests
         var range = 2;
 
         // Act
-        List<Hex> hexInRange = HexHelper.GetMovementRange(centerHex, hexList, range);
+        List<Hex> hexInRange = HexHelper.GetRange(centerHex, hexList, range);
 
         // Assert
         Assert.IsTrue(hexInRange.Count == 9);

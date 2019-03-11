@@ -46,6 +46,6 @@ public class Hex : IShape
         Row = (int)coords.y;
         S = -((int)coords.x + (int)coords.y);
 
-        Position = HexHelper.CalculateHexPosition(CubePosition, Radius);
+        Position = HexHelper.CalculateHexWorldPosition(CubePosition, Radius);
     }
 }
