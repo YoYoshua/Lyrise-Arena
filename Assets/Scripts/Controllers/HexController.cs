@@ -43,10 +43,15 @@ public class HexController : MonoBehaviour
     {
         if (Input.GetMouseButton(0))
         {
-            gameObject.GetComponentInParent<HexGrid>().CheckField(HexObject);
+            gameObject.GetComponentInParent<HexGridController>().OnFieldClick(HexObject);
         }
     }
 
+    #region SetReach()
+    /// <summary>
+    /// Set or remove hex reach state
+    /// </summary>
+    /// <param name="reach"></param>
     public void SetReach(bool reach)
     {
         if (reach)
@@ -57,8 +62,14 @@ public class HexController : MonoBehaviour
         {
             PopSprite();
         }
-    }
+    } 
+    #endregion
 
+    #region SetHover()
+    /// <summary>
+    /// Set or remove hex hover state
+    /// </summary>
+    /// <param name="hover"></param>
     public void SetHover(bool hover)
     {
         if (hover)
@@ -69,7 +80,8 @@ public class HexController : MonoBehaviour
         {
             PopSprite();
         }
-    }
+    } 
+    #endregion
 
     #region SpriteStack
     private void PushSprite(GameObject sprite)

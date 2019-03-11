@@ -4,12 +4,21 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class PieceController : MonoBehaviour
+public class PieceController : MonoBehaviour, IMovable
 {
-    public Creature creature;
-    public int CurrentActionPoints;
+    public Creature Creature { get; private set; }
+    public int currentActionPoints;
+
     [HideInInspector]
-    public IShape CurrentField;
+    public IShape CurrentField { get; private set; }
+
+    private HexGridController HexGrid
+    {
+        get
+        {
+            return GetComponentInParent<HexGridController>();
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -21,7 +30,7 @@ public class PieceController : MonoBehaviour
         CurrentField = startField;
         this.transform.position = CurrentField.Position;
 
-        creature = new Creature
+        Creature = new Creature
         {
             HealthPoints = 100,
             ActionPoints = 2,
@@ -40,46 +49,32 @@ public class PieceController : MonoBehaviour
             }
         };
 
-        CurrentActionPoints = creature.ActionPoints;
+        currentActionPoints = Creature.ActionPoints;
     }
 
-    void OnMouseDrag()
-    {
-        this.transform.position = MouseHelper.GetMouseWorldPoint(Camera.main);
-    }
-
-    internal void MovePiece(Hex destination)
+    #region Move()
+    /// <summary>
+    /// Moves piece to passed destination shape. When isUndoing is true, APs are added instead of subtracted.
+    /// </summary>
+    /// <param name="destination">Destination field</param>
+    /// <param name="isUndoing">Whether the action is being done or undone</param>
+    public void Move(IShape destination, bool isUndoing = false)
     {
         Hex currentHex = (Hex)CurrentField;
-        int distance = HexHelper.AxialDistance(currentHex.AxialPosition, destination.AxialPosition);
+        Hex destinationHex = (Hex)destination;
+
+        int distance = HexHelper.AxialDistance(currentHex.AxialPosition, destinationHex.AxialPosition);
         CurrentField = destination;
         this.transform.position = destination.Position;
-        CurrentActionPoints -= distance;
-    }
 
-    void OnMouseUp()
-    {
-        if(CurrentField is Hex)
+        if (!isUndoing)
         {
-            Vector3 hexPosition = HexHelper.WorldPositionToAxial(this.transform.position, HexGrid.hexRadius);
-            Debug.Log(hexPosition);
-            IShape newField = HexGrid.FieldList.Where(f => f.Column == hexPosition.x && f.Row == hexPosition.y).FirstOrDefault();
-
-            if(newField != null)
-            {
-                CurrentField = newField;
-                Debug.Log(CurrentField);
-                this.transform.position = CurrentField.Position;
-            }
-
+            currentActionPoints -= distance;
         }
-    }
-
-    private HexGrid HexGrid
-    {
-        get
+        else
         {
-            return GetComponentInParent<HexGrid>();
+            currentActionPoints += distance;
         }
-    }
+    } 
+    #endregion
 }
