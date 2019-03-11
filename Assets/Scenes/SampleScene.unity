@@ -124,6 +124,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PiecePrefab
       objectReference: {fileID: 0}
+    - target: {fileID: 2765945089985326906, guid: a424a32cb35f4c1469b689b0c30ef4ac,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 3078335390298155532, guid: a424a32cb35f4c1469b689b0c30ef4ac,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -183,6 +188,41 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsTrigger
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8071822840115593482, guid: a424a32cb35f4c1469b689b0c30ef4ac,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5456223990706540163, guid: a424a32cb35f4c1469b689b0c30ef4ac,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3000301513550221692, guid: a424a32cb35f4c1469b689b0c30ef4ac,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7676701922820099382, guid: a424a32cb35f4c1469b689b0c30ef4ac,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6997048138912336386, guid: a424a32cb35f4c1469b689b0c30ef4ac,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5108855012863259230, guid: a424a32cb35f4c1469b689b0c30ef4ac,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2015591274983928702, guid: a424a32cb35f4c1469b689b0c30ef4ac,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a424a32cb35f4c1469b689b0c30ef4ac, type: 3}
@@ -905,7 +945,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1512770370}
   - component: {fileID: 1512770371}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GameGrid
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Creature
@@ -23,5 +24,11 @@ public class Creature
                 { Aspect.Void, 0.2f },
                 { Aspect.Water, 0.2f }
         };
+    }
+
+    public Aspect GetDominatingAspect()
+    {
+        float strongestElementalAffinity = Mathf.Max(ElementalAffinity.Values.ToArray());
+        return ElementalAffinity.Where(e => e.Value == strongestElementalAffinity).FirstOrDefault().Key;
     }
 }

@@ -7,6 +7,8 @@ using UnityEngine;
 public class PieceController : MonoBehaviour, IMovable
 {
     public Creature Creature { get; private set; }
+
+    [HideInInspector]
     public int currentActionPoints;
 
     [HideInInspector]
@@ -50,7 +52,54 @@ public class PieceController : MonoBehaviour, IMovable
         };
 
         currentActionPoints = Creature.ActionPoints;
+
+        SetPieceSprite(Creature.GetDominatingAspect());
     }
+
+    #region SetPieceSprite()
+    private void SetPieceSprite(Aspect aspect)
+    {
+        switch(aspect)
+        {
+            case Aspect.Earth:
+                SetSpriteByName("earth_piece");
+                break;
+
+            case Aspect.Fire:
+                SetSpriteByName("fire_piece");
+                break;
+
+            case Aspect.Life:
+                SetSpriteByName("life_piece");
+                break;
+
+            case Aspect.Light:
+                SetSpriteByName("light_piece");
+                break;
+
+            case Aspect.Shadow:
+                SetSpriteByName("shadow_piece");
+                break;
+
+            case Aspect.Void:
+                SetSpriteByName("void_piece");
+                break;
+
+            case Aspect.Water:
+                SetSpriteByName("water_piece");
+                break;
+
+            case Aspect.Wind:
+                SetSpriteByName("wind_piece");
+                break;
+        }
+    }
+
+    private void SetSpriteByName(string v)
+    {
+        this.transform.Find(v).gameObject.SetActive(true);
+    }
+    #endregion
 
     #region Move()
     /// <summary>
